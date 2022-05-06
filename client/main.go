@@ -52,8 +52,18 @@ func handleConnection(conn net.Conn) (io.ReadWriter, error) {
 			return nil, fmt.Errorf(("not socks5"))
 		}
 
-		if _, err = conn.Write([]byte("hello123")); err != nil {
-			log.Printf("write err %v", err)
+		// Write socks version
+		if _, err = conn.Write([]byte{socks.Version5, socks.AuthNone}); err != nil {
+			return nil, fmt.Errorf("failed to write socks5")
+		}
+
+		// Read cmd
+		n, err = conn.Read(buf[:])
+		log.Printf("read command n: %v", n)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read cmd %w", err)
+		}
+		if n < 7 {
 			break
 		}
 	}
