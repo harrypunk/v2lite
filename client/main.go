@@ -6,7 +6,7 @@ import (
 	"log"
 	"net"
 
-	"github.com/harrypunk/v2lite/proxy/socks/socks5"
+	"github.com/harrypunk/v2lite/proxy/socks"
 )
 
 const (
@@ -48,7 +48,7 @@ func handleConnection(conn net.Conn) (io.ReadWriter, error) {
 			return nil, fmt.Errorf("read zero")
 		}
 		version := buf[0]
-		if version != socks5.Version5 {
+		if version != socks.Version5 {
 			return nil, fmt.Errorf(("not socks5"))
 		}
 
